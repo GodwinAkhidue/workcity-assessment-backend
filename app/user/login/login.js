@@ -49,14 +49,25 @@ user_login.post(`/api/login`, async (req, res) => {
 
     const token = generateJWT({ id: user.id, email: user.email });
 
+    //save jwt as a browser cookie
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: 604800000,
+      maxAge: 604800000, //7 days in milliseconds
     });
 
-    return res.status(200).json({ success: true });
+    //return user information to the frontend
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: user.id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (err) {
     console.log(err);
     return res.status(200).json({

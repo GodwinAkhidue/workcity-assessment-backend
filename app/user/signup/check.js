@@ -1,6 +1,6 @@
 export default function Check(req) {
   const { firstname, lastname, email, password } = req.body;
-
+  //using email regex to validate email format
   function isValidEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);

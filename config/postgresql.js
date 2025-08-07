@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+//postgresql configuration
 const pool = new Pool({
   host: process.env.POSTGRESQL_HOST,
   port: process.env.POSTGRESQL_PORT,

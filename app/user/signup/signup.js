@@ -33,27 +33,28 @@ user_signup.post(`/api/signup`, async (req, res) => {
       const result = await db.query(
         `
                 INSERT INTO users 
-                ( firstname, lastname, email, password )
-                VALUES ( $1, $2, $3, $4 )
-                RETURNING id, email;
+                ( firstname, lastname, email, password, role )
+                VALUES ( $1, $2, $3, $4, $5 )
+                RETURNING id, email, firstname, lastname, role;
             `,
-        [firstname, lastname, email, hashedPassword]
+        [firstname, lastname, email, hashedPassword, "user"]
       );
 
       db.release();
 
       const user = result.rows[0];
 
-      const token = generateJWT(user);
+      const token = generateJWT({ id: user.id, email: user.email });
 
+      //store the jwt as a browser cookie
       res.cookie("token", token, {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
-        maxAge: 604800000,
+        maxAge: 604800000, //7 days in milliseconds
       });
 
-      return res.status(200).json({ success: true });
+      return res.status(200).json({ success: true, user });
     } catch (err) {
       //return this warning if there's a duplicate email
       if (err.code === "23505") {
