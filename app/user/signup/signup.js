@@ -40,6 +40,8 @@ user_signup.post(`/api/signup`, async (req, res) => {
         [firstname, lastname, email, hashedPassword]
       );
 
+      db.release();
+
       const user = result.rows[0];
 
       const token = generateJWT(user);

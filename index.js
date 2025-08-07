@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import user_signup from "./app/user/signup/signup.js";
 import cookieParser from "cookie-parser";
+import user_login from "./app/user/login/login.js";
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/", user_signup);
+
+app.use("/", user_login);
 
 app.get("/", (req, res) => {
   res.send("Workcity assessment backend by Ebehiremen Akhidue");
